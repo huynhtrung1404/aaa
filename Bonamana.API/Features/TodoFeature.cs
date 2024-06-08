@@ -9,8 +9,8 @@ public static class TodoFeature
     public static IEndpointRouteBuilder? UseTodoItemEndpoint(this IEndpointRouteBuilder builder)
     {
         var todoItemGroup = builder.MapGroup("TodoItem").WithTags("Todo Item Feature");
-        todoItemGroup.MapGet("/", async (BonamanaContext context) => TypedResults.Ok(await context.Todos.ToListAsync()));
-        todoItemGroup.MapGet("/getDetail/{id}", async (BonamanaContext context, string id) => TypedResults.Ok(await context.Todos.SingleOrDefaultAsync(x => x.Id.Equals(id))));
+        todoItemGroup.MapGet("/", async (BonamanaContext context) => TypedResults.Ok(await context.Todos.AsNoTracking().ToListAsync()));
+        todoItemGroup.MapGet("/getDetail/{id}", async (BonamanaContext context, string id) => TypedResults.Ok(await context.Todos.AsNoTracking().SingleOrDefaultAsync(x => x.Id.Equals(id))));
         todoItemGroup.MapPost("/postTodo", async (BonamanaContext context, [FromBody] Todo todo) =>
         {
             context.Todos.Add(todo);
@@ -39,8 +39,8 @@ public static class TodoFeature
     public static IEndpointRouteBuilder? UseTodoListEndpoint(this IEndpointRouteBuilder builder)
     {
         var todoList = builder.MapGroup("TodoList").WithTags("Todo List Feature");
-        todoList.MapGet("/", async (BonamanaContext context) => TypedResults.Ok(await context.TodoLists.Include(x => x.Todos).ToListAsync()));
-        todoList.MapGet("/getDetail", async (BonamanaContext context, int id) => TypedResults.Ok(await context.TodoLists.SingleOrDefaultAsync(x => x.Id.Equals(id))));
+        todoList.MapGet("/", async (BonamanaContext context) => TypedResults.Ok(await context.TodoLists.Include(x => x.Todos).AsNoTracking().ToListAsync()));
+        todoList.MapGet("/getDetail", async (BonamanaContext context, int id) => TypedResults.Ok(await context.TodoLists.AsNoTracking().SingleOrDefaultAsync(x => x.Id.Equals(id))));
         todoList.MapPost("/post", async (BonamanaContext context, TodoList item) =>
         {
             await context.AddAsync(item);

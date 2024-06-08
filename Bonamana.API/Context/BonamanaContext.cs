@@ -13,6 +13,5 @@ public class BonamanaContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Todo>().Property(x => x.CreatedDate).HasDefaultValue(DateTime.UtcNow).ValueGeneratedOnAdd();
-
     }
 }
